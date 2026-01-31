@@ -8,10 +8,15 @@ import { TodoModal } from "./components/TodoModal/TodoModal";
 import { DraggableTodoItem } from "./components/DraggableTodoItem/DraggableTodoItem";
 
 export default function Home() {
-  const [todos, setTodos] = useState<Todo[]>(() => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  useEffect(() => {
     const stored = localStorage.getItem('todos');
-    return stored ? JSON.parse(stored) : [];
-  });
+    if (stored) {
+      setTodos(JSON.parse(stored));
+    }
+  }, []);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
   const [filters, setFilters] = useState<TodoFilters>({
@@ -321,7 +326,7 @@ export default function Home() {
             ) : (
               filteredTodos.map((todo, index) => (
                 <DraggableTodoItem
-                 key={index}
+                  key={index}
                   todo={todo}
                   onToggle={handleToggleTodo}
                   onDelete={handleDeleteTodo}
